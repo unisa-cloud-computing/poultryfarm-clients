@@ -1,9 +1,9 @@
-package com.agricolacertini.business.mapper;
+package com.poultryfarm.business.mapper;
 
-import com.agricolacertini.application.model.api.clienti.CreateDtoClient;
-import com.agricolacertini.application.model.api.clienti.SearchClientsDto;
-import com.agricolacertini.application.model.api.clienti.UpdateDtoClient;
-import com.agricolacertini.persistence.entity.Cliente;
+import com.poultryfarm.application.model.CreateDtoClient;
+import com.poultryfarm.application.model.SearchClientsDto;
+import com.poultryfarm.application.model.UpdateDtoClient;
+import com.poultryfarm.persistence.entity.Cliente;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

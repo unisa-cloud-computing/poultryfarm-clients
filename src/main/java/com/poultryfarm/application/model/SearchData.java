@@ -1,4 +1,4 @@
-package com.agricolacertini.application.model.api.clienti;
+package com.poultryfarm.application.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

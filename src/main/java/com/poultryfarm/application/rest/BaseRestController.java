@@ -1,4 +1,4 @@
-package com.agricolacertini.application.rest;
+package com.poultryfarm.application.rest;
 
 /**
  * Base REST controller providing common pagination defaults and utilities.

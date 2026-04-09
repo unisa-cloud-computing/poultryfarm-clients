@@ -1,6 +1,6 @@
-package com.agricolacertini.persistence.repository;
+package com.poultryfarm.persistence.repository;
 
-import com.agricolacertini.persistence.entity.Cliente;
+import com.poultryfarm.persistence.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

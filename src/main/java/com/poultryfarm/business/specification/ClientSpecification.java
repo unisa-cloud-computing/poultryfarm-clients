@@ -1,7 +1,7 @@
-package com.agricolacertini.business.specification;
+package com.poultryfarm.business.specification;
 
-import com.agricolacertini.application.model.api.clienti.SearchData;
-import com.agricolacertini.persistence.entity.Cliente;
+import com.poultryfarm.application.model.SearchData;
+import com.poultryfarm.persistence.entity.Cliente;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

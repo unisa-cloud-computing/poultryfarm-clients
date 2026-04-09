@@ -1,4 +1,4 @@
-package com.agricolacertini.business.exception;
+package com.poultryfarm.business.exception;
 
 public class CertiniClientNotFoundException extends Exception {
 

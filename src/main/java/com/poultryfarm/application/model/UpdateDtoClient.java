@@ -1,4 +1,4 @@
-package com.agricolacertini.application.model.api.clienti;
+package com.poultryfarm.application.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

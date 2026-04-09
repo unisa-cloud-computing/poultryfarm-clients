@@ -1,14 +1,14 @@
-package com.agricolacertini.application.rest;
+package com.poultryfarm.application.rest;
 
-import com.agricolacertini.application.model.api.PageInfo;
-import com.agricolacertini.application.model.api.clienti.CreateDtoClient;
-import com.agricolacertini.application.model.api.clienti.SearchClientResponse;
-import com.agricolacertini.application.model.api.clienti.SearchData;
-import com.agricolacertini.application.model.api.clienti.UpdateDtoClient;
-import com.agricolacertini.business.exception.CertiniClientNotFoundException;
-import com.agricolacertini.business.exception.CertiniInvalidFiscalCodeException;
-import com.agricolacertini.business.service.ClientService;
-import com.agricolacertini.persistence.entity.Cliente;
+import com.poultryfarm.application.model.PageInfo;
+import com.poultryfarm.application.model.CreateDtoClient;
+import com.poultryfarm.application.model.SearchClientResponse;
+import com.poultryfarm.application.model.SearchData;
+import com.poultryfarm.application.model.UpdateDtoClient;
+import com.poultryfarm.business.exception.CertiniClientNotFoundException;
+import com.poultryfarm.business.exception.CertiniInvalidFiscalCodeException;
+import com.poultryfarm.business.service.ClientService;
+import com.poultryfarm.persistence.entity.Cliente;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

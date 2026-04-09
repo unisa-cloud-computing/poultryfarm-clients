@@ -1,4 +1,4 @@
-package com.agricolacertini.persistence.entity;
+package com.poultryfarm.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
