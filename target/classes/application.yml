@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: clienti-microservice
+
+  # ── Azure SQL Datasource ──────────────────────────────────────────
+  datasource:
+    url: jdbc:sqlserver://${AZURE_SQL_HOST}:${AZURE_SQL_PORT:1433};database=${AZURE_SQL_DATABASE};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: ${AZURE_SQL_USERNAME}
+    password: ${AZURE_SQL_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  # ── JPA / Hibernate ───────────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate          # solo validazione; le migrazioni vanno gestite con Flyway o simili
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        default_schema: certini
+        format_sql: true
+
+# ── Actuator ──────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# ── Logging ───────────────────────────────────────────────────────
+logging:
+  level:
+    root: INFO
+    com.agricolacertini: DEBUG
+    org.hibernate.SQL: WARN
