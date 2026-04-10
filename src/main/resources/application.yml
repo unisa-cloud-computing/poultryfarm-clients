@@ -7,13 +7,6 @@ spring:
   application:
     name: clienti-microservice
 
-  # ── Azure SQL Datasource ──────────────────────────────────────────
-  datasource:
-    url: jdbc:sqlserver://${AZURE_SQL_HOST}:${AZURE_SQL_PORT:1433};database=${AZURE_SQL_DATABASE};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-    username: ${AZURE_SQL_USERNAME}
-    password: ${AZURE_SQL_PASSWORD}
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
   # ── JPA / Hibernate ───────────────────────────────────────────────
   jpa:
     hibernate:
@@ -23,7 +16,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
         format_sql: true
-
-app:
-  datasource:
-    server-name: sql-saas-poultryfarm-dev.database.windows.net;
