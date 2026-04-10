@@ -1,0 +1,11 @@
+# Connessione al Catalog DB con Managed Identity (senza password!)
+# Il parametro authentication=DefaultAzureCredential usa la Managed Identity in Azure e Azure CLI in locale (per sviluppo)
+
+spring:
+  datasource:
+    catalog:
+      url: jdbc:sqlserver://<SQL_SERVER_NAME>.database.windows.net:1433;database=PoultryCatalog;encrypt=true;trustServerCertificate=false;authentication=DefaultAzureCredential;
+
+app:
+  datasource:
+    tenant-url-template: jdbc:sqlserver://<SQL_SERVER_NAME>.database.windows.net:1433;database={tenantDb};encrypt=true;trustServerCertificate=false;authentication=DefaultAzureCredential;
