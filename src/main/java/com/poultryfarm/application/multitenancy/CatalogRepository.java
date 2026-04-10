@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Legge dal Catalog DB il nome del database corrispondente a un tenantId.
  *
- * @Cacheable evita di interrogare il Catalog DB ad ogni request:
+ * evita di interrogare il Catalog DB ad ogni request:
  * il nome del DB di un tenant non cambia mai a runtime.
  */
 @Repository

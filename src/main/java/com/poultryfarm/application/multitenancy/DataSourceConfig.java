@@ -36,7 +36,6 @@ public class DataSourceConfig {
     /**
      * DataSource principale usato da Spring Data JPA.
      * @Primary lo rende il DataSource di default per tutti i repository.
-     *
      * Non ha una connessione fissa: ad ogni operazione JPA delega a
      * TenantRoutingDataSource che sceglie il DataSource del tenant corrente.
      */

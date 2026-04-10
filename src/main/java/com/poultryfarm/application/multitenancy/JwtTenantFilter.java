@@ -16,7 +16,6 @@ import java.util.Base64;
  * Filtro eseguito una volta per ogni request HTTP.
  * Legge il JWT dall'header Authorization, estrae il claim tenantId
  * e lo mette nel TenantContext.
- *
  * Non valida la firma del JWT: quella la fa già APIM prima
  * di inoltrare la request al microservizio.
  */
