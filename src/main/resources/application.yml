@@ -23,3 +23,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
         format_sql: true
+
+app:
+  datasource:
+    server-name: sql-saas-poultryfarm-dev.database.windows.net;
