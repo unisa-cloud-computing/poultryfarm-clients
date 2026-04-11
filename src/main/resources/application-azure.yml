@@ -1,8 +1,12 @@
 spring:
+  sql:
+    init:
+      mode: never
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration
 
 app:
   datasource:
-    server-name: sql-saas-poultryfarm-dev.database.windows.net;
+    server-name: sql-saas-poultryfarm-dev.database.windows.net
