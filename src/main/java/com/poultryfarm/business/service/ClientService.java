@@ -5,8 +5,8 @@ import com.poultryfarm.application.model.CreateDtoClient;
 import com.poultryfarm.application.model.SearchClientResponse;
 import com.poultryfarm.application.model.SearchData;
 import com.poultryfarm.application.model.UpdateDtoClient;
-import com.poultryfarm.business.exception.CertiniClientNotFoundException;
-import com.poultryfarm.business.exception.CertiniInvalidFiscalCodeException;
+import com.poultryfarm.business.exception.ClientNotFoundException;
+import com.poultryfarm.business.exception.InvalidFiscalCodeException;
 import com.poultryfarm.business.mapper.ClienteMapper;
 import com.poultryfarm.business.specification.ClientSpecification;
 import com.poultryfarm.business.util.FiscalCodeValidator;
@@ -31,13 +31,13 @@ public class ClientService {
     private static final String CLIENT_NOT_FOUND_MESSAGE = "client with id %d not found";
 
     @Transactional
-    public void markAsDeleted(Long userId) throws CertiniClientNotFoundException {
+    public void markAsDeleted(Long userId) throws ClientNotFoundException {
         clienteRepository.findByIdAndEliminatoFalse(userId)
                 .map(client -> {
                     client.setEliminato(true);
                     return clienteRepository.save(client);
                 })
-                .orElseThrow(() -> new CertiniClientNotFoundException(
+                .orElseThrow(() -> new ClientNotFoundException(
                         String.format(CLIENT_NOT_FOUND_MESSAGE, userId)
                 ));
     }
@@ -81,7 +81,7 @@ public class ClientService {
     }
 
     @Transactional
-    public Cliente save(CreateDtoClient clientDto) throws CertiniInvalidFiscalCodeException {
+    public Cliente save(CreateDtoClient clientDto) throws InvalidFiscalCodeException {
         validateInput(clientDto);
         validateFiscalCode(clientDto.getCodiceFiscale());
 
@@ -90,13 +90,13 @@ public class ClientService {
     }
 
     @Transactional
-    public Cliente updateClient(UpdateDtoClient clientDto) throws CertiniClientNotFoundException {
+    public Cliente updateClient(UpdateDtoClient clientDto) throws ClientNotFoundException {
         return clienteRepository.findByIdAndEliminatoFalse(clientDto.getId())
                 .map(clientEntityFromDB -> {
                     Cliente clienteToBeUpdated = clienteMapper.updateClient(clientEntityFromDB, clientDto);
                     return clienteRepository.save(clienteToBeUpdated);
                 })
-                .orElseThrow(() -> new CertiniClientNotFoundException(
+                .orElseThrow(() -> new ClientNotFoundException(
                         String.format(CLIENT_NOT_FOUND_MESSAGE, clientDto.getId())
                 ));
     }
@@ -107,9 +107,9 @@ public class ClientService {
         }
     }
 
-    private void validateFiscalCode(String fiscalCode) throws CertiniInvalidFiscalCodeException {
+    private void validateFiscalCode(String fiscalCode) throws InvalidFiscalCodeException {
         if (StringUtils.isNotBlank(fiscalCode) && !FiscalCodeValidator.isValid(fiscalCode)) {
-            throw new CertiniInvalidFiscalCodeException("Invalid fiscal code format");
+            throw new InvalidFiscalCodeException("Invalid fiscal code format");
         }
     }
 }

@@ -5,8 +5,8 @@ import com.poultryfarm.application.model.CreateDtoClient;
 import com.poultryfarm.application.model.SearchClientResponse;
 import com.poultryfarm.application.model.SearchData;
 import com.poultryfarm.application.model.UpdateDtoClient;
-import com.poultryfarm.business.exception.CertiniClientNotFoundException;
-import com.poultryfarm.business.exception.CertiniInvalidFiscalCodeException;
+import com.poultryfarm.business.exception.ClientNotFoundException;
+import com.poultryfarm.business.exception.InvalidFiscalCodeException;
 import com.poultryfarm.business.service.ClientService;
 import com.poultryfarm.persistence.entity.Cliente;
 import jakarta.validation.Valid;
@@ -58,8 +58,8 @@ public class ClienteRestController extends BaseRestController {
         try {
             Cliente newClient = this.clientService.save(clientDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(newClient);
-        } catch (CertiniInvalidFiscalCodeException certiniInvalidFiscalCodeException) {
-            return handleInvalidFiscalCode(certiniInvalidFiscalCodeException);
+        } catch (InvalidFiscalCodeException invalidFiscalCodeException) {
+            return handleInvalidFiscalCode(invalidFiscalCodeException);
         }
     }
 
@@ -68,7 +68,7 @@ public class ClienteRestController extends BaseRestController {
         try {
             this.clientService.markAsDeleted(id);
             return ResponseEntity.noContent().build();
-        } catch (CertiniClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -78,12 +78,12 @@ public class ClienteRestController extends BaseRestController {
         try {
             this.clientService.updateClient(clientDto);
             return ResponseEntity.ok(this.clientService.updateClient(clientDto));
-        } catch (CertiniClientNotFoundException certiniClientNotFoundException) {
+        } catch (ClientNotFoundException clientNotFoundException) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    private ResponseEntity<Cliente> handleInvalidFiscalCode(CertiniInvalidFiscalCodeException e) {
+    private ResponseEntity<Cliente> handleInvalidFiscalCode(InvalidFiscalCodeException e) {
         return ResponseEntity
                 .badRequest()
                 .header("X-Error-Message", e.getMessage())
