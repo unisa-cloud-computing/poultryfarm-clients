@@ -1,0 +1,12 @@
+package com.poultryfarm;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ClientiMicroserviceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ClientiMicroserviceApplication.class, args);
+    }
+}

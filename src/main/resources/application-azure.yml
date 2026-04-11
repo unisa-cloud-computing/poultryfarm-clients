@@ -1,0 +1,8 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+app:
+  datasource:
+    server-name: sql-saas-poultryfarm-dev.database.windows.net;
