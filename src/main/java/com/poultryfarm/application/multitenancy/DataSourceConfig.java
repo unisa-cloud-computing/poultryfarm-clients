@@ -1,6 +1,7 @@
 package com.poultryfarm.application.multitenancy;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ public class DataSourceConfig {
     }
 
     @Bean(name = "catalogJdbcTemplate")
-    public JdbcTemplate catalogJdbcTemplate(DataSource catalogDataSource) {
+    public JdbcTemplate catalogJdbcTemplate(@Qualifier("catalogDataSource") DataSource catalogDataSource) {
         return new JdbcTemplate(catalogDataSource);
     }
 

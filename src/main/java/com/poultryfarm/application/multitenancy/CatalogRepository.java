@@ -1,5 +1,6 @@
 package com.poultryfarm.application.multitenancy;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ public class CatalogRepository {
 
     private final JdbcTemplate catalogJdbcTemplate;
 
-    public CatalogRepository(JdbcTemplate catalogJdbcTemplate) {
+    public CatalogRepository(@Qualifier("catalogJdbcTemplate") JdbcTemplate catalogJdbcTemplate) {
         this.catalogJdbcTemplate = catalogJdbcTemplate;
     }
 
