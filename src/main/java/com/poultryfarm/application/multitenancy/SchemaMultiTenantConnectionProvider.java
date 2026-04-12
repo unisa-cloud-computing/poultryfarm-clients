@@ -1,18 +1,35 @@
 package com.poultryfarm.application.multitenancy;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.jdbc.connections.spi.DatabaseConnectionInfo;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Component
 public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectionProvider<String> {
 
     private final DataSource dataSource;
+    private final CatalogRepository catalogRepository;
 
-    public SchemaMultiTenantConnectionProvider(DataSource dataSource) {
-        this.dataSource = dataSource;
+    @Value("${app.datasource.server-name}")
+    private String serverName;
+
+    // Cache dei DataSource già creati: tenantId → DataSource
+    private final java.util.concurrent.ConcurrentHashMap<String, DataSource> tenantCache = new java.util.concurrent.ConcurrentHashMap<>();
+
+    public SchemaMultiTenantConnectionProvider(
+            @Qualifier("catalogDataSource") DataSource catalogDataSource,
+            CatalogRepository catalogRepository
+    ) {
+        this.dataSource = catalogDataSource;
+        this.catalogRepository = catalogRepository;
     }
 
     @Override
@@ -35,14 +52,16 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     }
 
     @Override
-    public Connection getConnection(String tenantSchema) {
+    public Connection getConnection(String tenantId) {
         try {
-            Connection conn = dataSource.getConnection();
-
-            conn.setSchema(tenantSchema);
-
+            var ds = tenantCache.computeIfAbsent(tenantId, id -> {
+                var tenantInfo = catalogRepository.findTenantInfo(id);
+                TenantContext.setSchema(tenantInfo.schemaName());
+                return buildDataSource(tenantInfo.databaseName());
+            });
+            Connection conn = ds.getConnection();
+            conn.setSchema(TenantContext.getSchema());
             return conn;
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +70,6 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     @Override
     public void releaseConnection(String tenantSchema, Connection connection) {
         try {
-            connection.setSchema(null);
             connection.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -71,5 +89,15 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     @Override
     public <T> T unwrap(Class<T> unwrapType) {
         return null;
+    }
+
+    private DataSource buildDataSource(String databaseName) {
+        SQLServerDataSource ds = new SQLServerDataSource();
+        ds.setServerName(serverName);
+        ds.setDatabaseName(databaseName);
+        ds.setEncrypt("true");
+        ds.setTrustServerCertificate(false);
+        ds.setAuthentication("ActiveDirectoryManagedIdentity");
+        return ds;
     }
 }

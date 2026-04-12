@@ -5,12 +5,14 @@ import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class DataSourceConfig {
@@ -18,17 +20,26 @@ public class DataSourceConfig {
     @Value("${app.datasource.server-name}")
     private String serverName;
 
-
-    // ── Hibernate Multi-Tenancy ─────────────────────────────────────────────
-
+    // ── EntityManagerFactory ────────────────────────────────────────────────
     @Bean
-    public MultiTenantConnectionProvider<String> multiTenantConnectionProvider(DataSource dataSource) {
-        return new SchemaMultiTenantConnectionProvider(dataSource);
-    }
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder builder,
+            @Qualifier("catalogDataSource") DataSource catalogDataSource,
+            MultiTenantConnectionProvider<String> connectionProvider,
+            CurrentTenantIdentifierResolver<String> tenantResolver
+    ) {
 
-    @Bean
-    public CurrentTenantIdentifierResolver<String> tenantIdentifierResolver() {
-        return new SchemaTenantResolver();
+        Map<String, Object> props = new HashMap<>();
+
+        props.put("hibernate.multiTenancy", "SCHEMA");
+        props.put("hibernate.multi_tenant_connection_provider", connectionProvider);
+        props.put("hibernate.tenant_identifier_resolver", tenantResolver);
+
+        return builder
+                .dataSource(catalogDataSource)
+                .packages("com.poultryfarm")
+                .properties(props)
+                .build();
     }
 
     // ── Catalog DataSource ────────────────────────────────────────────────────
@@ -55,7 +66,7 @@ public class DataSourceConfig {
      * Non ha una connessione fissa: ad ogni operazione JPA delega a
      * TenantRoutingDataSource che sceglie il DataSource del tenant corrente.
      */
-    @Bean
+/*    @Bean
     @Primary
     public DataSource dataSource(CatalogRepository catalogRepository) {
 
@@ -90,7 +101,7 @@ public class DataSourceConfig {
         routingDs.afterPropertiesSet();
 
         return routingDs;
-    }
+    }*/
 
     // ── Helper ────────────────────────────────────────────────────────────────
 
