@@ -13,7 +13,7 @@
 
     <groupId>com.agricolacertini</groupId>
     <artifactId>poultryfarm-clienti</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>clienti-microservice</name>
     <description>Microservizio Clienti - Agricola Certini</description>
 
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>msal4j</artifactId>
-            <version>1.14.0</version>
+            <version>1.15.1</version>
         </dependency>
 
         <dependency>
