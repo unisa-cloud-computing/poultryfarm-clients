@@ -13,7 +13,7 @@
 
     <groupId>com.agricolacertini</groupId>
     <artifactId>poultryfarm-clienti</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>clienti-microservice</name>
     <description>Microservizio Clienti - Agricola Certini</description>
 
@@ -57,6 +57,13 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>12.10.0.jre11</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>msal4j</artifactId>
+            <version>1.14.0</version>
         </dependency>
 
         <!-- ==================== Lombok ==================== -->
