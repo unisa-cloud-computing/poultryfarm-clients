@@ -8,7 +8,6 @@ package com.poultryfarm.application.multitenancy;
 public class TenantContext {
 
     private static final ThreadLocal<String> tenantId = new ThreadLocal<>();
-    private static final ThreadLocal<String> schema = new ThreadLocal<>();
 
     public static void setTenantId(String id) {
         tenantId.set(id);
@@ -18,16 +17,7 @@ public class TenantContext {
         return tenantId.get();
     }
 
-    public static void setSchema(String schemaName) {
-        schema.set(schemaName);
-    }
-
-    public static String getSchema() {
-        return schema.get();
-    }
-
     public static void clear() {
         tenantId.remove();
-        schema.remove();
     }
 }

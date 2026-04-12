@@ -59,12 +59,10 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
             logger.info("########## CLIENTI SERVICE - Getting connection for tenant: {}", tenantId);
             var ds = tenantCache.computeIfAbsent(tenantId, id -> {
                 var tenantInfo = catalogRepository.findTenantInfo(id);
-                TenantContext.setSchema(tenantInfo.schemaName());
                 return buildDataSource(tenantInfo.databaseName());
             });
             Connection conn = ds.getConnection();
-            conn.setSchema(TenantContext.getSchema());
-            logger.info("########## CLIENTI SERVICE - Connection obtained for tenant: {}, schema: {}", tenantId, TenantContext.getSchema());
+            logger.info("########## CLIENTI SERVICE - Connection obtained for tenant: {}", tenantId);
             return conn;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -72,9 +70,9 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     }
 
     @Override
-    public void releaseConnection(String tenantSchema, Connection connection) {
+    public void releaseConnection(String tenant, Connection connection) {
         try {
-            logger.info("########## CLIENTI SERVICE - Releasing connection for tenant schema: {}", tenantSchema);
+            logger.info("########## CLIENTI SERVICE - Releasing connection for tenant: {}", tenant);
             connection.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
