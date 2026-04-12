@@ -1,6 +1,8 @@
 package com.poultryfarm.application.multitenancy;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
+import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
+import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,19 @@ public class DataSourceConfig {
 
     @Value("${app.datasource.server-name}")
     private String serverName;
+
+
+    // ── Hibernate Multi-Tenancy ─────────────────────────────────────────────
+
+    @Bean
+    public MultiTenantConnectionProvider<String> multiTenantConnectionProvider(DataSource dataSource) {
+        return new SchemaMultiTenantConnectionProvider(dataSource);
+    }
+
+    @Bean
+    public CurrentTenantIdentifierResolver<String> tenantIdentifierResolver() {
+        return new SchemaTenantResolver();
+    }
 
     // ── Catalog DataSource ────────────────────────────────────────────────────
 
@@ -63,8 +78,9 @@ public class DataSourceConfig {
                 // Prima volta per questo tenant: crea e metti in cache
                 // Volte successive: restituisce quello già in cache
                 return tenantCache.computeIfAbsent(tenantId, id -> {
-                    String dbName = catalogRepository.findDatabaseNameByTenantId(id);
-                    return buildDataSource(dbName);
+                    var tenantInfo = catalogRepository.findTenantInfo(id);
+                    TenantContext.setSchema(tenantInfo.schemaName());
+                    return buildDataSource(tenantInfo.databaseName());
                 });
             }
         };

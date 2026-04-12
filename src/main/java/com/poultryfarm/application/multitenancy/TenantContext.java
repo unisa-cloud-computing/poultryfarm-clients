@@ -7,19 +7,27 @@ package com.poultryfarm.application.multitenancy;
  */
 public class TenantContext {
 
-    private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
+    private static final ThreadLocal<String> tenantId = new ThreadLocal<>();
+    private static final ThreadLocal<String> schema = new ThreadLocal<>();
 
-    public static void setTenantId(String tenantId) {
-        CURRENT_TENANT.set(tenantId);
+    public static void setTenantId(String id) {
+        tenantId.set(id);
     }
 
     public static String getTenantId() {
-        return CURRENT_TENANT.get();
+        return tenantId.get();
     }
 
-    // Va chiamato alla fine di ogni request: i thread Tomcat vengono
-    // riusati e non devono portarsi dietro il tenantId della request precedente
+    public static void setSchema(String schemaName) {
+        schema.set(schemaName);
+    }
+
+    public static String getSchema() {
+        return schema.get();
+    }
+
     public static void clear() {
-        CURRENT_TENANT.remove();
+        tenantId.remove();
+        schema.remove();
     }
 }

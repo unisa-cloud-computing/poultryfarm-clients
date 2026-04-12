@@ -13,16 +13,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CatalogRepository {
 
+    public record TenantInfo(String databaseName, String schemaName) {}
     private final JdbcTemplate catalogJdbcTemplate;
 
     public CatalogRepository(@Qualifier("catalogJdbcTemplate") JdbcTemplate catalogJdbcTemplate) {
         this.catalogJdbcTemplate = catalogJdbcTemplate;
     }
 
-    public String findDatabaseNameByTenantId(String tenantId) {
+    public TenantInfo findTenantInfo(String tenantId) {
         return catalogJdbcTemplate.queryForObject(
-                "SELECT database_name FROM dbo.TENANTS WHERE tenant_id = ?",
-                String.class,
+                "SELECT database_name, schema_name FROM dbo.TENANTS WHERE tenant_id = ?",
+                (rs, rowNum) -> new TenantInfo(
+                        rs.getString("database_name"),
+                        rs.getString("schema_name")
+                ),
                 tenantId
         );
     }
