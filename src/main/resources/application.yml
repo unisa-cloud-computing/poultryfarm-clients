@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: clienti-microservice
+    name: cliente-service
 
   # ── JPA / Hibernate ───────────────────────────────────────────────
   jpa:
