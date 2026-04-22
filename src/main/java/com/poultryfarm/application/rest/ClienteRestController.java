@@ -9,6 +9,7 @@ import com.poultryfarm.business.exception.ClientNotFoundException;
 import com.poultryfarm.business.exception.InvalidFiscalCodeException;
 import com.poultryfarm.business.service.ClientService;
 import com.poultryfarm.persistence.entity.Cliente;
+import io.dapr.client.DaprClient;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,17 @@ import java.util.Optional;
 public class ClienteRestController extends BaseRestController {
 
     private final ClientService clientService;
+    private final DaprClient  daprClient;
 
     @Autowired
-    public ClienteRestController(ClientService clientService) {
+    public ClienteRestController(ClientService clientService, DaprClient daprClient) {
         this.clientService = clientService;
+        this.daprClient = daprClient;
+    }
+
+    @GetMapping("/test-dapr-meta")
+    public String testDaprMeta() {
+        return daprClient.getMetadata().block().getId();
     }
 
     @GetMapping("/{id}")
